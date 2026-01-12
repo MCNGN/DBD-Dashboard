@@ -1,0 +1,40 @@
+# Compiled Python files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.swp
+*.egg
+.tox/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE files and directories
+# VS Code
+.vscode/
+
+# PyCharm/IntelliJ
+.idea/
+
+# Jupyter Notebook specific files
+.ipynb_checkpoints
+
+# Distribution / packaging
+.Python
+build/
+dist/
+wheels/
+*.egg-info/
+EGG-INFO/
+
+# Logs and miscellaneous
+*.log
+pip-log.txt
+pip-delete-this-arg.txt
+
+# OS-specific files
+.DS_Store # macOS
+Thumbs.db # Windows
