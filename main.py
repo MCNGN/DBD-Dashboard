@@ -1,11 +1,11 @@
 from package.config import conf
-from package.earth_engine.chirps import chirps_monthly
-# from package.earth_engine.export import to_data_frame
-from package.bps.datasets import show
+from package.earth_engine.datasets import chirps_monthly
+from package.bps.datasets import get_population_density
 from package.utils import check_data_exist, to_csv
 import pandas as pd
 
 curah_hujan = 'curah_hujan.csv'
+population_density = 'kepadatan_penduduk.csv'
 
 if check_data_exist(curah_hujan):
     print("Data sudah tersedia lanjutkan ke proses selanjutnya")
@@ -25,5 +25,11 @@ else:
         print("Gagal memproses data curah hujan", str(e))
 
 
-df = show()
-to_csv(df,'data_penduduk_2025.csv')
+dfs = []
+for year in range(conf.START_YEAR, conf.END_YEAR + 1):
+    print("Processing year:", year)
+    population = get_population_density(year)        
+    dfs.append(population)
+
+result = pd.concat(dfs, ignore_index=True)
+to_csv(result, population_density)
