@@ -1,7 +1,8 @@
 import pandas as pd
+from package.config import conf
 
 def get_population_density(year):
-    url = f"https://webapi.bps.go.id/v1/api/interoperabilitas/datasource/simdasi/id/25/tahun/{year}/id_tabel/WVRlTTcySlZDa3lUcFp6czNwbHl4QT09/wilayah/3205000/key/b0df6b1249740dfb7704be081518e6ef"   
+    url = f"https://webapi.bps.go.id/v1/api/interoperabilitas/datasource/simdasi/id/25/tahun/{year}/id_tabel/WVRlTTcySlZDa3lUcFp6czNwbHl4QT09/wilayah/3205000/key/{conf.API_KEY}"   
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
                     "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"

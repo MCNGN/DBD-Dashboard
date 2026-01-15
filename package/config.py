@@ -16,4 +16,7 @@ class Settings:
     START_YEAR = 2022
     END_YEAR = 2024
 
+    # --- CONFIG BPS -----
+    API_KEY = os.getenv("BPS_API_KEY")
+    
 conf = Settings()

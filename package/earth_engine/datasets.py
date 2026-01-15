@@ -2,7 +2,7 @@ import ee
 import geemap
 from .authentication import init_google_engine
 from package.config import conf
-from package.utils import months
+from package.utils import months, rh_from_temp_dewpoints
 
 # Inisisasi Service Google Earth Engine
 init_google_engine()
@@ -47,6 +47,34 @@ def temperature_monthly(year) :
             reducer=ee.Reducer.mean(),
             scale=conf.SCALE_ERA5
         ).map(lambda f: f.set({"year": year, "month": m, "var": "tmean_c"}))
+    
+        out = out.merge(stats)
+    
+    df = geemap.ee_to_df(out)    
+    
+    return df
+
+def humidity_monthly(year) :
+    out = ee.FeatureCollection([])
+
+    for m in months:
+        start = ee.Date.fromYMD(year, m, 1)
+        end = start.advance(1, "month")
+
+        def hourly_humidity(img):
+            tC = img.select('temperature_2m').subtract(273.15)
+            tdC = img.select('dewpoint_temperature_2m').subtract(273.15)
+            rh = rh_from_temp_dewpoints(tC, tdC)
+            return rh.copyProperties(img, img.propertyNames())
+
+        humidity_month = era5.filterDate(start, end).map(hourly_humidity).mean().rename('rh_percent')
+
+
+        stats = humidity_month.reduceRegions(
+            collection=kecamatan,
+            reducer=ee.Reducer.mean(),
+            scale=conf.SCALE_ERA5
+        ).map(lambda f: f.set({"year": year, "month": m, "var": "rh_percent"}))
     
         out = out.merge(stats)
     
