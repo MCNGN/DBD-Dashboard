@@ -11,7 +11,6 @@ def rh_from_temp_dewpoints(tC, tdC):
 
 def check_data_exist(file_name):
     p = Path(f'./raw_data/{file_name}')
-    print(p)
     return p.is_file()
 
 def to_csv(df, filename):

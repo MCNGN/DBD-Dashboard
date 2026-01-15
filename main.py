@@ -1,71 +1,51 @@
 from package.config import conf
 from package.earth_engine.datasets import precipitation_monthly , temperature_monthly, humidity_monthly
-from package.bps.datasets import get_population_density
+from package.bps.datasets import get_population_density, get_case_dbd
 from package.utils import check_data_exist, to_csv
 import pandas as pd
 
-curah_hujan = 'curah_hujan.csv'
-population_density = 'kepadatan_penduduk.csv'
-temperature = 'temperature.csv'
-humidity = 'humidity.csv'
+data = [{
+        "func": precipitation_monthly, 
+        "file": 'curah_hujan.csv',
+        "label": 'curah hujan'
+        },
+        {
+        "func": get_population_density, 
+        "file": 'kepadatan_penduduk.csv',
+        "label": 'populasi'
+        },
+        {
+        "func": temperature_monthly, 
+        "file": 'temperature.csv',
+        "label": 'temperature'
+        },
+        {
+        "func": humidity_monthly, 
+        "file": 'humidity.csv',
+        "label": 'kelembapan'
+        },
+        {
+        "func": get_case_dbd, 
+        "file": 'case_dbd.csv',
+        "label": 'kasus dbd'
+        }
+]
 
-if check_data_exist(curah_hujan):
-    print("Data sudah tersedia lanjutkan ke proses selanjutnya")
-else:
-    try:
-        dfs = []
-        for year in range(conf.START_YEAR, conf.END_YEAR + 1):
-            print("Processing year:", year)
-            fc = precipitation_monthly(year)        
-            dfs.append(fc)
+for item in data:
+    if check_data_exist(item["file"]):
+        print(f"Data {item["label"]} sudah tersedia lanjutkan ke proses selanjutnya \n")
+    else:
+        try:
+            print(f"Memprosses data {item["label"]} : ")
+            dfs = []
+            for year in range(conf.START_YEAR, conf.END_YEAR + 1):
+                print("Processing year:", year)
+                fc = item["func"](year)        
+                dfs.append(fc)
 
-        result = pd.concat(dfs, ignore_index=True)
-        to_csv(result, curah_hujan)
-        
-        print("Berhasil memprosses data")
-    except Exception as e:
-        print("Gagal memproses data curah hujan", str(e))
-
-
-if check_data_exist(temperature):
-    print("Data sudah tersedia lanjutkan ke proses selanjutnya")
-else:
-    try:
-        dfs = []
-        for year in range(conf.START_YEAR, conf.END_YEAR + 1):
-            print("Processing year:", year)
-            fc = temperature_monthly(year)        
-            dfs.append(fc)
-
-        result = pd.concat(dfs, ignore_index=True)
-        to_csv(result, temperature)
-        
-        print("Berhasil memprosses data")
-    except Exception as e:
-        print("Gagal memproses data temperature", str(e))
-
-if check_data_exist(humidity):
-    print("Data sudah tersedia lanjutkan ke proses selanjutnya")
-else:
-    try:
-        dfs = []
-        for year in range(conf.START_YEAR, conf.END_YEAR + 1):
-            print("Processing year:", year)
-            fc = humidity_monthly(year)        
-            dfs.append(fc)
-
-        result = pd.concat(dfs, ignore_index=True)
-        to_csv(result, humidity)
-        
-        print("Berhasil memprosses data")
-    except Exception as e:
-        print("Gagal memproses data kelembapan", str(e))
-
-dfs = []
-for year in range(conf.START_YEAR, conf.END_YEAR + 1):
-    print("Processing year:", year)
-    population = get_population_density(year)        
-    dfs.append(population)
-
-result = pd.concat(dfs, ignore_index=True)
-to_csv(result, population_density)
+            result = pd.concat(dfs, ignore_index=True)
+            to_csv(result, item["file"])
+            
+            print(f"Berhasil memprosses data {item["label"]} \n")
+        except Exception as e:
+            print(f"Gagal memproses data {item["label"]} \n", str(e))
