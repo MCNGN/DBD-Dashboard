@@ -12,7 +12,7 @@ chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY").select("precipitation")
 era5 = ee.ImageCollection("ECMWF/ERA5_LAND/HOURLY").select(["temperature_2m", "dewpoint_temperature_2m"])
 
 
-def chirps_monthly(year):
+def precipitation_monthly(year):
     acc = ee.FeatureCollection([])
 
     for m in months:
@@ -30,5 +30,26 @@ def chirps_monthly(year):
         acc = acc.merge(stats)
 
     df = geemap.ee_to_df(acc)    
+    
+    return df
+
+def temperature_monthly(year) :
+    out = ee.FeatureCollection([])
+
+    for m in months:
+        start = ee.Date.fromYMD(year, m, 1)
+        end = start.advance(1, "month")
+
+        temp_month = era5.filterDate(start, end).select('temperature_2m').mean().subtract(273.15).rename('tmean_c')
+
+        stats = temp_month.reduceRegions(
+            collection=kecamatan,
+            reducer=ee.Reducer.mean(),
+            scale=conf.SCALE_ERA5
+        ).map(lambda f: f.set({"year": year, "month": m, "var": "tmean_c"}))
+    
+        out = out.merge(stats)
+    
+    df = geemap.ee_to_df(out)    
     
     return df

@@ -57,8 +57,6 @@ def show_table(csv_df=None, gdf=None, full_display=False, max_height=1600, row_h
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
-# ...existing code...
-
 def show_map(gdf, height=800):
     bounds = gdf.total_bounds  # [minx, miny, maxx, maxy]
     center_lat = (bounds[1] + bounds[3]) / 2
