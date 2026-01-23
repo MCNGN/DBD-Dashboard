@@ -2,6 +2,8 @@ from package.config import conf
 from package.earth_engine.datasets import precipitation_monthly , temperature_monthly, humidity_monthly
 from package.bps.datasets import get_population_density, get_case_dbd
 from package.utils import check_data_exist, to_csv
+from package.preprocess.preprocess import merge_data
+from package.process.process import process_z_score
 import pandas as pd
 
 data = [{
@@ -49,3 +51,7 @@ for item in data:
             print(f"Berhasil memprosses data {item["label"]} \n")
         except Exception as e:
             print(f"Gagal memproses data {item["label"]} \n", str(e))
+
+preprocess_data = merge_data()
+
+process_z_score(preprocess_data)

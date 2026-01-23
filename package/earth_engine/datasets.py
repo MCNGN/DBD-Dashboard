@@ -11,7 +11,6 @@ kecamatan = ee.FeatureCollection(conf.SHAPEFILE)
 chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY").select("precipitation")
 era5 = ee.ImageCollection("ECMWF/ERA5_LAND/HOURLY").select(["temperature_2m", "dewpoint_temperature_2m"])
 
-
 def precipitation_monthly(year):
     acc = ee.FeatureCollection([])
 
