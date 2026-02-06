@@ -61,9 +61,8 @@ st.markdown(f"""
     [data-testid="stSidebar"] {{
         background: {THEME["sidebar_bg"]};
         color: white;
-        min-width: 300px;
-        width: 300px !important;
     }}
+
     [data-testid="stSidebar"] > div:first-child {{
         padding-top: 0.5rem;
     }}
@@ -477,6 +476,7 @@ with st.sidebar:
         years = sorted(df['year'].unique())
         selected_year = st.selectbox("Pilih Tahun:", years, key="year_filter", label_visibility="collapsed")
     else:
+        st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         years = sorted(df['year'].unique())
         selected_year = years[-1]
 
