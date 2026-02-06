@@ -40,10 +40,16 @@ st.markdown(f"""
     /* ===== GLOBAL ===== */
     .stApp {{
         background-color: {THEME["bg"]};
+        overflow: hidden;
+    }}
+    .main {{
+        overflow: hidden !important;
     }}
     .main .block-container {{
-        padding: 1.5rem 2rem 1.5rem 2rem !important;
+        padding: 0.5rem 1rem 0.3rem 1rem !important;
         max-width: 100% !important;
+        height: calc(100vh - 1rem);
+        overflow: hidden !important;
     }}
     
     /* Remove iframe border */
@@ -55,19 +61,28 @@ st.markdown(f"""
     [data-testid="stSidebar"] {{
         background: {THEME["sidebar_bg"]};
         color: white;
-        min-width: 260px;
-        width: 260px !important;
+        min-width: 300px;
+        width: 300px !important;
     }}
     [data-testid="stSidebar"] > div:first-child {{
-        padding-top: 1rem;
+        padding-top: 0.5rem;
+    }}
+    [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {{
+        gap: 0.5rem !important;
     }}
     [data-testid="stSidebar"] p,
     [data-testid="stSidebar"] span,
     [data-testid="stSidebar"] label,
     [data-testid="stSidebar"] div,
     [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] h5 {{
         color: #ffffff !important;
+    }}
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 {{
+        margin: 0 !important;
+        padding: 0 !important;
     }}
     
     /* NAV BUTTONS */
@@ -77,12 +92,12 @@ st.markdown(f"""
         color: #ffffff !important;
         border: 1px solid rgba(255,255,255,0.2) !important;
         border-radius: 8px;
-        padding: 12px 18px;
+        padding: 10px 16px;
         font-size: 14px;
         font-weight: 600;
         text-align: left;
         transition: all 0.2s ease;
-        margin-bottom: 6px;
+        margin-bottom: 2px;
     }}
     [data-testid="stSidebar"] .stButton > button span {{
         color: #ffffff !important;
@@ -105,12 +120,24 @@ st.markdown(f"""
         background: rgba(255,255,255,0.1) !important;
         border-color: rgba(255,255,255,0.2) !important;
         color: #ffffff !important;
+        cursor: pointer !important;
     }}
     [data-testid="stSidebar"] .stSelectbox > div > div > div {{
         color: #ffffff !important;
     }}
     [data-testid="stSidebar"] [data-baseweb="select"] span {{
         color: #ffffff !important;
+    }}
+    [data-testid="stSidebar"] [data-baseweb="select"] input {{
+        caret-color: transparent !important;
+        cursor: pointer !important;
+    }}
+    /* Show dropdown arrow */
+    [data-testid="stSidebar"] [data-baseweb="select"] svg {{
+        display: block !important;
+        visibility: visible !important;
+        fill: #ffffff !important;
+        opacity: 1 !important;
     }}
     
     /* ===== HEADER - override stMarkdown inside main-header ===== */
@@ -142,16 +169,16 @@ st.markdown(f"""
     /* ===== METRIC CARDS ===== */
     .metric-card {{
         background: {THEME["card_bg"]};
-        border-radius: 10px;
-        padding: 24px 28px;
+        border-radius: 8px;
+        padding: 16px 20px;
         border: none;
         border-left: 4px solid {THEME["accent"]};
-        margin-bottom: 16px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     }}
     .metric-card h3 {{
-        margin: 0 0 12px 0;
-        font-size: 0.85em;
+        margin: 0 0 6px 0;
+        font-size: 0.75em;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         color: {THEME["text_muted"]} !important;
@@ -165,9 +192,9 @@ st.markdown(f"""
         color: {THEME["text"]} !important;
     }}
     .metric-card .sub {{
-        font-size: 0.9em;
+        font-size: 0.8em;
         color: {THEME["text_muted"]} !important;
-        margin-top: 8px;
+        margin-top: 4px;
     }}
     
     /* ===== CLUSTER CARDS ===== */
@@ -204,11 +231,16 @@ st.markdown(f"""
     
     /* ===== SECTION TITLE ===== */
     .section-title {{
-        font-size: 4em;
+        font-size: 2em;
         font-weight: 600;
         color: {THEME["text"]} !important;
-        margin: 12px 0 14px 0;
+        margin: 0 0 16px 0;
         padding: 0;
+    }}
+    [data-testid="stMain"] .stMarkdown p.section-title {{
+        font-size: 1.5em !important;
+        font-weight: 600 !important;
+        margin: 0 0 16px 0 !important;
     }}
     
     /* ===== DIVIDER ===== */
@@ -216,7 +248,7 @@ st.markdown(f"""
         height: 1px;
         background: rgba(255,255,255,0.15);
         border: none;
-        margin: 16px 0;
+        margin: 5px 0 20px 0;
     }}
     
     /* ===== FOOTER ===== */
@@ -226,7 +258,7 @@ st.markdown(f"""
         color: {THEME["text_muted"]};
         font-size: 0.8em;
         border-top: 1px solid {THEME["border"]};
-        margin-top: 28px;
+        margin-top: 20px;
     }}
     
     /* ===== TABS ===== */
@@ -274,6 +306,15 @@ st.markdown(f"""
         color: #e0e0e0 !important;
     }}
     
+    /* FAQ footer styling */
+    [data-testid="stMain"] .stMarkdown .faq-footer h3,
+    [data-testid="stMain"] .stMarkdown .faq-footer p {{
+        color: #ffffff !important;
+    }}
+    [data-testid="stMain"] .stMarkdown .faq-footer p {{
+        opacity: 0.85;
+    }}
+    
     /* ===== DATAFRAME / TABLE - Light theme ===== */
     [data-testid="stDataFrame"],
     [data-testid="stDataFrame"] div,
@@ -304,6 +345,9 @@ st.markdown(f"""
     }}
     
     /* Main content download button fix */
+    [data-testid="stMain"] .stDownloadButton {{
+        margin-top: 16px !important;
+    }}
     [data-testid="stMain"] .stDownloadButton > button {{
         background: {THEME["accent"]} !important;
         color: #ffffff !important;
@@ -328,6 +372,7 @@ st.markdown(f"""
         background: {THEME["card_bg"]} !important;
         color: {THEME["text"]} !important;
         border-color: {THEME["border"]} !important;
+        cursor: pointer !important;
     }}
     [data-testid="stMain"] .stSelectbox label,
     [data-testid="stMain"] .stMultiSelect label {{
@@ -336,6 +381,10 @@ st.markdown(f"""
     [data-testid="stMain"] [data-baseweb="select"] span,
     [data-testid="stMain"] [data-baseweb="tag"] span {{
         color: {THEME["text"]} !important;
+    }}
+    [data-testid="stMain"] [data-baseweb="select"] input {{
+        caret-color: transparent !important;
+        cursor: pointer !important;
     }}
     
     /* Multiselect tag styling */
@@ -363,7 +412,8 @@ st.markdown(f"""
     /* Sidebar section titles */
     [data-testid="stSidebar"] h5 {{
         font-size: 0.75em !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 6px !important;
+        margin-top: 0 !important;
         color: #e0e0e0 !important;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -372,6 +422,7 @@ st.markdown(f"""
     /* Sidebar horizontal rule */
     [data-testid="stSidebar"] hr {{
         border-color: rgba(255,255,255,0.2) !important;
+        margin: 8px 0 !important;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -393,10 +444,10 @@ gdf, df = load_data()
 # ===================== SIDEBAR NAVIGATION =====================
 with st.sidebar:
     st.markdown("""
-    <div style='text-align: center; padding: 16px 0 20px 0;'>
-        <span style='font-size: 2.5em;'>🦟</span>
-        <h2 style='color: #ffffff !important; margin: 8px 0 4px 0; font-size: 1.2em; font-weight: 600;'>Dashboard DBD</h2>
-        <p style='color: #b0b8c1 !important; font-size: 0.8em; margin: 0;'>Kabupaten Garut</p>
+    <div style='text-align: center; padding-bottom: 32px;'>
+        <span style='font-size: 2.2em; display: block; margin-bottom: 16px;'>🦟</span>
+        <h2 style='color: #ffffff !important; font-size: 1.3em; font-weight: 600; line-height: 1.2; margin: 0;'>Dashboard Peta Risiko DBD</h2>
+        <h3 style='color: #b0b8c1 !important; font-size: 1.2em; font-weight: 400; line-height: 1.2; margin: 0;'>Kabupaten Garut</h3>
     </div>
     """, unsafe_allow_html=True)
     
@@ -420,22 +471,14 @@ with st.sidebar:
         st.session_state.page = "faq"
         st.rerun()
     
-    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    
     if st.session_state.page in ["home", "data"]:
+        st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         st.markdown("##### 📅 Filter Tahun")
         years = sorted(df['year'].unique())
         selected_year = st.selectbox("Pilih Tahun:", years, key="year_filter", label_visibility="collapsed")
     else:
         years = sorted(df['year'].unique())
         selected_year = years[-1]
-    
-    st.markdown("---")
-    st.markdown("""
-    <div style='text-align: center; padding: 10px 0;'>
-        <p style='color: #8a939e !important; font-size: 0.72em; margin: 0;'>Skripsi © 2026 · Rifqi</p>
-    </div>
-    """, unsafe_allow_html=True)
 
 # Filter data
 df_filtered = df[df['year'] == selected_year].copy()
@@ -450,14 +493,7 @@ if kecamatan_col is None:
     kecamatan_col = gdf.columns[0]
 
 # ===================== HOME PAGE =====================
-if st.session_state.page == "home":
-    st.markdown(f"""
-    <div class="main-header">
-        <h1>🗺️ Peta Risiko DBD Kabupaten Garut</h1>
-        <p>Visualisasi clustering risiko DBD tahun {selected_year}</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
+if st.session_state.page == "home":    
     # Metrics row
     total_kasus = df_filtered['jumlah_kasus'].sum()
     avg_ir = df_filtered['ir'].mean()
@@ -512,7 +548,7 @@ if st.session_state.page == "home":
         
         bounds = gdf_merged.total_bounds
         center = [(bounds[1] + bounds[3]) / 2, (bounds[0] + bounds[2]) / 2]
-        m = folium.Map(location=center, zoom_start=9, tiles=THEME["map_tiles"])
+        m = folium.Map(location=center, zoom_start=9, tiles=THEME["map_tiles"], attr=' ')
         
         for idx, row in gdf_merged.iterrows():
             cluster = row.get('cluster', -1)
@@ -540,39 +576,54 @@ if st.session_state.page == "home":
             
             # Professional popup
             popup = f"""
-            <div style="font-family:'Segoe UI',sans-serif;min-width:280px;background:#fff;color:#2c3e50;padding:0;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.15);overflow:hidden;">
-                <div style="background:{color};padding:14px 18px;color:white;">
+            <style>
+                .leaflet-popup-content-wrapper {{
+                    padding: 0 !important;
+                    border-radius: 8px !important;
+                    overflow: hidden;
+                }}
+                .leaflet-popup-content {{
+                    margin: 0 !important;
+                    width: auto !important;
+                }}
+                .leaflet-popup-close-button {{
+                    display: none !important;
+                }}
+            </style>
+            <div style="font-family:'Segoe UI',sans-serif;min-width:280px;background:#fff;color:#2c3e50;padding:0;border-radius:8px;overflow:hidden;">
+                <div style="background:{color};padding:14px 18px;color:white;position:relative;">
+                    <a href="#" onclick="this.closest('.leaflet-popup').remove(); return false;" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:white;font-size:18px;text-decoration:none;opacity:0.8;">✕</a>
                     <h4 style="margin:0;font-size:15px;font-weight:600;">📍 {row[kecamatan_col]}</h4>
                     <span style="font-size:12px;opacity:0.9;">Cluster: {cl_label}</span>
                 </div>
                 <div style="padding:16px 18px;">
                     <table style="width:100%;font-size:13px;color:#495057;border-collapse:collapse;">
                         <tr style="border-bottom:1px solid #e9ecef;">
-                            <td style="padding:10px 0;">Jumlah Kasus</td>
+                            <td style="padding:10px 0;">🦠 Jumlah Kasus</td>
                             <td style="text-align:right;padding:10px 0;font-weight:600;">{kasus_disp}</td>
                         </tr>
                         <tr style="border-bottom:1px solid #e9ecef;">
-                            <td style="padding:10px 0;">Incidence Rate</td>
+                            <td style="padding:10px 0;">📊 Incidence Rate</td>
                             <td style="text-align:right;padding:10px 0;font-weight:600;">{ir_disp}</td>
                         </tr>
                         <tr style="border-bottom:1px solid #e9ecef;">
-                            <td style="padding:10px 0;">Jumlah Penduduk</td>
+                            <td style="padding:10px 0;">👥 Jumlah Penduduk</td>
                             <td style="text-align:right;padding:10px 0;">{penduduk_disp}</td>
                         </tr>
                         <tr style="border-bottom:1px solid #e9ecef;">
-                            <td style="padding:10px 0;">Kepadatan Penduduk</td>
+                            <td style="padding:10px 0;">🏘️ Kepadatan Penduduk</td>
                             <td style="text-align:right;padding:10px 0;">{kepadatan_disp}</td>
                         </tr>
                         <tr style="border-bottom:1px solid #e9ecef;">
-                            <td style="padding:10px 0;">Curah Hujan</td>
+                            <td style="padding:10px 0;">🌧️ Curah Hujan</td>
                             <td style="text-align:right;padding:10px 0;">{curah_hujan_disp}</td>
                         </tr>
                         <tr style="border-bottom:1px solid #e9ecef;">
-                            <td style="padding:10px 0;">Kelembapan</td>
+                            <td style="padding:10px 0;">💧 Kelembapan</td>
                             <td style="text-align:right;padding:10px 0;">{kelembapan_disp}</td>
                         </tr>
                         <tr>
-                            <td style="padding:10px 0;">Suhu Rata-rata</td>
+                            <td style="padding:10px 0;">🌡️ Suhu Rata-rata</td>
                             <td style="text-align:right;padding:10px 0;">{temperature_disp}</td>
                         </tr>
                     </table>
@@ -605,6 +656,16 @@ if st.session_state.page == "home":
         </div>
         """
         m.get_root().html.add_child(folium.Element(legend_html))
+        
+        # Hide Leaflet attribution
+        hide_attr_css = """
+        <style>
+            .leaflet-control-attribution {
+                display: none !important;
+            }
+        </style>
+        """
+        m.get_root().html.add_child(folium.Element(hide_attr_css))
         
         st_folium(m, height=580, width="stretch")
     
@@ -797,22 +858,132 @@ elif st.session_state.page == "faq":
     """, unsafe_allow_html=True)
     
     faq_items = [
-        ("Apa itu Dashboard Peta Risiko DBD ini?",
-         "Dashboard GIS berbasis web untuk menampilkan hasil clustering risiko DBD di 42 kecamatan Kabupaten Garut menggunakan metode K-Means Clustering."),
-        ("Metode apa yang digunakan?",
-         "**K-Means Clustering** dengan 6 variabel: Jumlah Kasus, Incidence Rate, Curah Hujan, Kelembapan, Suhu, dan Kepadatan Penduduk. Menghasilkan 3 cluster: Rendah, Sedang, Tinggi."),
-        ("Apa arti warna pada peta?",
-         "**Hijau** = Risiko Rendah · **Kuning** = Risiko Sedang · **Merah** = Risiko Tinggi"),
-        ("Apa itu Incidence Rate (IR)?",
-         "Jumlah kasus baru per 100.000 penduduk per tahun. Semakin tinggi IR, semakin besar risiko penularan DBD di wilayah tersebut."),
-        ("Data apa saja yang digunakan?",
-         "Data kasus DBD dan penduduk dari Dinkes Garut, data curah hujan, kelembapan & suhu dari BMKG, serta shapefile batas administrasi kecamatan."),
-        ("Bagaimana cara menggunakan dashboard?",
-         "1. Pilih halaman di sidebar (Home/Lihat Data/FAQ)\n2. Pilih tahun yang ingin dilihat\n3. Klik area pada peta untuk melihat detail\n4. Gunakan 'Lihat Data' untuk tabel & grafik"),
-        ("Apa batasan dashboard ini?",
-         "Hasil clustering bergantung pada kelengkapan data, klasifikasi bersifat relatif per tahun, dan dashboard ini bukan pengganti analisis epidemiologi profesional."),
-        ("Teknologi apa yang digunakan?",
-         "**Python**, **Streamlit**, **Folium**, **GeoPandas**, **Plotly**, **Scikit-learn** untuk K-Means Clustering"),
+        ("🌐 Apa itu Dashboard Peta Risiko DBD ini?",
+         """Dashboard ini merupakan **Sistem Informasi Geografis (GIS) berbasis web** yang dikembangkan untuk memvisualisasikan dan menganalisis tingkat risiko penyakit Demam Berdarah Dengue (DBD) di **42 kecamatan Kabupaten Garut**.
+
+Dashboard ini menggunakan **metode K-Means Clustering** untuk mengelompokkan wilayah berdasarkan tingkat risiko penularan DBD. Tujuan utamanya adalah membantu pengambilan keputusan dalam upaya pencegahan dan pengendalian DBD di tingkat kecamatan."""),
+
+        ("🔬 Metode apa yang digunakan dalam analisis?",
+         """Penelitian ini menggunakan **K-Means Clustering**, sebuah algoritma machine learning untuk mengelompokkan data menjadi beberapa cluster berdasarkan kemiripan karakteristik.
+
+**6 Variabel yang digunakan:**
+- 🏥 **Jumlah Kasus** - Total kasus DBD yang tercatat
+- 📊 **Incidence Rate (IR)** - Tingkat kejadian per 100.000 penduduk
+- 🌧️ **Curah Hujan** - Rata-rata curah hujan tahunan (mm)
+- 💧 **Kelembapan** - Rata-rata kelembapan udara (%)
+- 🌡️ **Suhu** - Rata-rata suhu udara (°C)
+- 👥 **Kepadatan Penduduk** - Jumlah penduduk per km²
+
+**Hasil clustering menghasilkan 3 kelompok risiko:**
+- **Cluster 0** - Risiko Rendah
+- **Cluster 1** - Risiko Sedang
+- **Cluster 2** - Risiko Tinggi"""),
+
+        ("🎨 Apa arti warna pada peta?",
+         """Warna pada peta menunjukkan **tingkat risiko DBD** di setiap kecamatan:
+
+🟢 **Hijau** = **Risiko Rendah** (Cluster 0)
+Wilayah dengan kombinasi faktor risiko yang relatif rendah, jumlah kasus dan IR cenderung minimal.
+
+🟡 **Kuning** = **Risiko Sedang** (Cluster 1)
+Wilayah dengan tingkat risiko menengah yang memerlukan perhatian dan tindakan pencegahan.
+
+🔴 **Merah** = **Risiko Tinggi** (Cluster 2)
+Wilayah prioritas dengan risiko penularan DBD tertinggi yang memerlukan intervensi segera."""),
+
+        ("📈 Apa itu Incidence Rate (IR)?",
+         """**Incidence Rate (IR)** adalah ukuran epidemiologi yang menunjukkan **jumlah kasus baru penyakit per 100.000 penduduk** dalam periode waktu tertentu (biasanya satu tahun).
+
+**Rumus perhitungan:**
+```
+IR = (Jumlah Kasus / Jumlah Penduduk) × 100.000
+```
+
+**Interpretasi IR:**
+- **IR < 20** → Risiko rendah
+- **IR 20-50** → Risiko sedang
+- **IR > 50** → Risiko tinggi (KLB potensial)
+
+Semakin tinggi nilai IR, semakin besar kemungkinan penularan DBD di wilayah tersebut."""),
+
+        ("📂 Data apa saja yang digunakan?",
+         """Dashboard ini menggunakan berbagai sumber data:
+
+**1. Data Kesehatan** 🏥
+- Jumlah kasus DBD per kecamatan per tahun
+- Data jumlah penduduk
+- Sumber: **Dinas Kesehatan Kabupaten Garut**
+
+**2. Data Iklim & Cuaca** 🌦️
+- Curah hujan rata-rata (mm)
+- Kelembapan udara (%)
+- Suhu rata-rata (°C)
+- Sumber: **Google Earth Engine (CHIRPS & ERA5)**
+
+**3. Data Geospasial** 🗺️
+- Shapefile batas administrasi kecamatan
+- Data kepadatan penduduk
+- Sumber: **BPS & Badan Informasi Geospasial**"""),
+
+        ("📖 Bagaimana cara menggunakan dashboard?",
+         """**Panduan Penggunaan Dashboard:**
+
+**1️⃣ Navigasi Halaman**
+Gunakan menu di sidebar kiri untuk berpindah antar halaman:
+- 🏠 **Home** - Peta utama dan ringkasan statistik
+- 📊 **Lihat Data** - Tabel data dan grafik analisis
+- ❓ **FAQ** - Informasi dan bantuan
+
+**2️⃣ Filter Tahun**
+Pilih tahun yang ingin ditampilkan menggunakan dropdown di sidebar.
+
+**3️⃣ Interaksi Peta**
+- **Hover** pada wilayah untuk melihat nama kecamatan
+- **Klik** pada wilayah untuk melihat popup detail lengkap
+- Gunakan kontrol zoom untuk memperbesar/memperkecil
+
+**4️⃣ Analisis Data**
+Di halaman "Lihat Data", Anda dapat:
+- Melihat tabel lengkap dengan filter cluster
+- Menganalisis grafik visualisasi
+- Mengunduh data dalam format CSV"""),
+
+        ("⚠️ Apa batasan dashboard ini?",
+         """**Batasan yang perlu diperhatikan:**
+
+1. **Ketergantungan Data** 📊
+   Akurasi hasil clustering sangat bergantung pada kelengkapan dan keakuratan data input.
+
+2. **Klasifikasi Relatif** 📅
+   Pengelompokan risiko bersifat relatif per tahun, sehingga perbandingan antar tahun harus dilakukan dengan hati-hati.
+
+3. **Bukan Pengganti Analisis Profesional** 🔬
+   Dashboard ini adalah alat bantu dan bukan pengganti analisis epidemiologi profesional oleh tenaga kesehatan.
+
+4. **Faktor Lain** 🏘️
+   Ada faktor risiko lain yang belum tercakup seperti perilaku masyarakat, kondisi sanitasi, dan keberadaan vektor nyamuk.
+
+5. **Pembaruan Data** 🔄
+   Data perlu diperbarui secara berkala untuk menjaga relevansi analisis."""),
+
+        ("💻 Teknologi apa yang digunakan?",
+         """**Stack Teknologi Dashboard:**
+
+**Backend & Processing:**
+- 🐍 **Python** - Bahasa pemrograman utama
+- 📊 **Pandas** - Manipulasi dan analisis data
+- 🗺️ **GeoPandas** - Pemrosesan data geospasial
+- 🤖 **Scikit-learn** - Implementasi K-Means Clustering
+- 🌍 **Google Earth Engine** - Akuisisi data iklim
+
+**Frontend & Visualisasi:**
+- 🎯 **Streamlit** - Framework web aplikasi
+- 🗺️ **Folium** - Pembuatan peta interaktif
+- 📈 **Plotly** - Grafik interaktif
+
+**Data Sources:**
+- 🌧️ **CHIRPS** - Data curah hujan satelit
+- 🌡️ **ERA5** - Data reanalysis iklim"""),
     ]
     
     for q, a in faq_items:
@@ -820,12 +991,10 @@ elif st.session_state.page == "faq":
             st.markdown(a)
     
     st.markdown(f"""
-    <div style="background:{THEME["sidebar_bg"]};border-radius:8px;
-         padding:24px;color:white;text-align:center;margin-top:20px;">
-        <h3 style="color:white;margin-bottom:8px;font-size:1.1em;font-weight:600;">Masih ada pertanyaan?</h3>
-        <p style="color:rgba(255,255,255,0.7);font-size:0.9em;margin:0;">Hubungi peneliti untuk informasi lebih lanjut.</p>
+    <div class="faq-footer" style="background:{THEME["sidebar_bg"]};border-radius:12px;
+         padding:28px;text-align:center;margin-top:24px;border:1px solid rgba(255,255,255,0.1);">
+        <h3 style="margin-bottom:1px;font-size:1.2em;font-weight:600;">💬 Masih ada pertanyaan?</h3>
+        <p style="font-size:0.95em;margin:0;">Hubungi developer untuk informasi lebih lanjut.</p>
     </div>
     """, unsafe_allow_html=True)
-    
-    st.markdown(f'<div class="footer">Dashboard Peta Risiko DBD Kabupaten Garut | Skripsi © 2026</div>', unsafe_allow_html=True)
 
