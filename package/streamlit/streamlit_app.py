@@ -386,26 +386,56 @@ st.markdown(f"""
         cursor: pointer !important;
     }}
     
-    /* Multiselect tag styling */
+    /* Multiselect tag styling - default */
     [data-testid="stMain"] [data-baseweb="tag"] {{
-        background-color: #3498db !important;
+        border-radius: 6px !important;
+        padding: 2px 8px !important;
+        margin: 2px !important;
+        height: 28px !important;
     }}
     [data-testid="stMain"] [data-baseweb="tag"] span {{
         color: #ffffff !important;
+        font-size: 12px !important;
     }}
     
-    /* Expander */
-    [data-testid="stMain"] .streamlit-expanderHeader p,
-    [data-testid="stMain"] .streamlit-expanderHeader span {{
-        color: {THEME["text"]} !important;
+    /* Cluster 0 - Rendah (Hijau) */
+    [data-testid="stMain"] .stMultiSelect [data-baseweb="tag"]:nth-child(1) {{
+        background-color: #28a745 !important;
     }}
-    [data-testid="stExpander"] summary span {{
-        color: {THEME["text"]} !important;
+    /* Cluster 1 - Sedang (Kuning) */
+    [data-testid="stMain"] .stMultiSelect [data-baseweb="tag"]:nth-child(2) {{
+        background-color: #ffc107 !important;
+    }}
+    [data-testid="stMain"] .stMultiSelect [data-baseweb="tag"]:nth-child(2) span {{
+        color: #2c3e50 !important;
+    }}
+    /* Cluster 2 - Tinggi (Merah) */
+    [data-testid="stMain"] .stMultiSelect [data-baseweb="tag"]:nth-child(3) {{
+        background-color: #dc3545 !important;
     }}
     
-    /* ===== SPACING FOR COLUMNS ===== */
+    /* Match multiselect and selectbox height & border */
+    [data-testid="stMain"] .stSelectbox [data-baseweb="select"] > div,
+    [data-testid="stMain"] .stMultiSelect [data-baseweb="select"] > div {{
+        min-height: 44px !important;
+        border-radius: 8px !important;
+        border: 1px solid {THEME["border"]} !important;
+        padding: 4px 12px !important;
+        display: flex !important;
+        align-items: center !important;
+    }}
+    
+    /* Selectbox text tidak kepotong */
+    [data-testid="stMain"] .stSelectbox [data-baseweb="select"] > div > div {{
+        overflow: visible !important;
+        text-overflow: unset !important;
+        white-space: nowrap !important;
+    }}
+    
+    /* Align columns vertically */
     [data-testid="stHorizontalBlock"] {{
         gap: 20px !important;
+        align-items: flex-end !important;
     }}
     
     /* Sidebar section titles */
@@ -1018,7 +1048,7 @@ Di halaman "Lihat Data", Anda dapat:
    Akurasi hasil clustering sangat bergantung pada kelengkapan dan keakuratan data input.
 
 2. **Klasifikasi Relatif** 📅
-   Pengelompokan risiko bersifat relatif per tahun, sehingga perbandingan antar tahun harus dilakukan dengan hati-hati.
+   Pengelompokkan risiko bersifat relatif per tahun, sehingga perbandingan antar tahun harus dilakukan dengan hati-hati.
 
 3. **Bukan Pengganti Analisis Profesional** 🔬
    Dashboard ini adalah alat bantu dan bukan pengganti analisis epidemiologi profesional oleh tenaga kesehatan.
