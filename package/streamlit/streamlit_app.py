@@ -687,20 +687,20 @@ if st.session_state.page == "home":
         st_folium(m, height=520, width='stretch')
 
         st.markdown(f"""
-        <div style="display:inline-flex;gap:20px;align-items:center;margin-top:-12px;
+        <div style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:-12px;
              background:{THEME["card_bg"]};padding:8px 18px;border-radius:8px;
-             border:1px solid {THEME["border"]};box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+             border:1px solid {THEME["border"]};box-shadow:0 1px 3px rgba(0,0,0,0.05);width:100%;">
             <span style="font-size:13px;font-weight:600;color:{THEME["text_muted"]};">Keterangan:</span>
             <span style="display:inline-flex;align-items:center;gap:6px;">
-                <span style="background:{CLUSTER_COLORS[0]};width:14px;height:14px;display:inline-block;border-radius:3px;"></span>
+                <span style="background:{CLUSTER_COLORS[0]};width:14px;height:14px;display:inline-block;border-radius:3px;flex-shrink:0;"></span>
                 <span style="font-size:13px;color:{THEME["text"]};">Rendah</span>
             </span>
             <span style="display:inline-flex;align-items:center;gap:6px;">
-                <span style="background:{CLUSTER_COLORS[1]};width:14px;height:14px;display:inline-block;border-radius:3px;"></span>
+                <span style="background:{CLUSTER_COLORS[1]};width:14px;height:14px;display:inline-block;border-radius:3px;flex-shrink:0;"></span>
                 <span style="font-size:13px;color:{THEME["text"]};">Sedang</span>
             </span>
             <span style="display:inline-flex;align-items:center;gap:6px;">
-                <span style="background:{CLUSTER_COLORS[2]};width:14px;height:14px;display:inline-block;border-radius:3px;"></span>
+                <span style="background:{CLUSTER_COLORS[2]};width:14px;height:14px;display:inline-block;border-radius:3px;flex-shrink:0;"></span>
                 <span style="font-size:13px;color:{THEME["text"]};">Tinggi</span>
             </span>
         </div>
