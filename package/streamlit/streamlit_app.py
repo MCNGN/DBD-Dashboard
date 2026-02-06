@@ -676,7 +676,7 @@ if st.session_state.page == "home":
         
         # Legend
         legend_html = f"""
-        <div style="position:fixed;bottom:20px;left:20px;z-index:1000;
+        <div style="position:fixed;bottom:20px;left:20px;z-index:500;
              background:white;padding:14px 18px;border-radius:8px;
              box-shadow:0 2px 8px rgba(0,0,0,0.12);font-size:12px;color:#2c3e50;border:1px solid #e9ecef;">
             <b style="font-size:12px;color:#495057;">Keterangan</b>
@@ -687,11 +687,18 @@ if st.session_state.page == "home":
         """
         m.get_root().html.add_child(folium.Element(legend_html))
         
-        # Hide Leaflet attribution
+        # Hide Leaflet attribution & fix popup z-index
         hide_attr_css = """
         <style>
             .leaflet-control-attribution {
                 display: none !important;
+            }
+            /* Pastikan popup selalu di atas legend */
+            .leaflet-popup {
+                z-index: 1000 !important;
+            }
+            .leaflet-popup-pane {
+                z-index: 1000 !important;
             }
         </style>
         """
