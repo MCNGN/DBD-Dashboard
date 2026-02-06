@@ -726,7 +726,15 @@ elif st.session_state.page == "data":
                 format_func=lambda x: f"Cluster {int(x)} - {['Rendah','Sedang','Tinggi'][int(x)]}"
             )
         with fc2:
-            sort_col = st.selectbox("Urutkan:", ['kecamatan', 'ir', 'jumlah_kasus', 'jumlah_penduduk', 'kepadatan_penduduk', 'cluster'])
+            sort_options = {
+                'kecamatan': 'Kecamatan',
+                'ir': 'Incidence Rate',
+                'jumlah_kasus': 'Jumlah Kasus',
+                'jumlah_penduduk': 'Jumlah Penduduk',
+                'kepadatan_penduduk': 'Kepadatan Penduduk',
+                'cluster': 'Cluster'
+            }
+            sort_col = st.selectbox("Urutkan:", options=list(sort_options.keys()), format_func=lambda x: sort_options[x])
         
         df_display = df_filtered[df_filtered['cluster'].isin(cluster_filter)].copy()
         df_display = df_display.sort_values(sort_col, ascending=(sort_col == 'kecamatan'))
@@ -735,10 +743,65 @@ elif st.session_state.page == "data":
                         'curah_hujan', 'kelembapan', 'temperature', 'cluster', 'risk_category']
         display_cols = [c for c in display_cols if c in df_display.columns]
         
+        # Mapping nama kolom agar lebih rapih
+        column_rename = {
+            'kecamatan': 'Kecamatan',
+            'jumlah_penduduk': 'Jumlah Penduduk',
+            'kepadatan_penduduk': 'Kepadatan Penduduk',
+            'jumlah_kasus': 'Jumlah Kasus',
+            'ir': 'Incidence Rate',
+            'curah_hujan': 'Curah Hujan (mm)',
+            'kelembapan': 'Kelembapan (%)',
+            'temperature': 'Suhu (°C)',
+            'cluster': 'Cluster',
+            'risk_category': 'Kategori Risiko'
+        }
+        
         # Create styled HTML table
         def create_styled_table(dataframe):
-            # Style the dataframe
-            styled_html = dataframe.to_html(index=False, escape=False, classes='custom-table')
+            # Add color badges for risk_category
+            df_styled = dataframe.copy()
+            
+            # Format numbers
+            # Thousands separator
+            for col in ['jumlah_penduduk', 'jumlah_kasus']:
+                if col in df_styled.columns:
+                    df_styled[col] = df_styled[col].apply(lambda x: f"{int(x):,}" if pd.notna(x) else "0")
+            
+            # Decimals and separators
+            for col in ['kepadatan_penduduk']:
+                if col in df_styled.columns:
+                    df_styled[col] = df_styled[col].apply(lambda x: f"{x:,.0f}" if pd.notna(x) else "0")
+
+            # 2 Decimal places
+            for col in ['ir', 'curah_hujan', 'kelembapan', 'temperature']:
+                if col in df_styled.columns:
+                    df_styled[col] = df_styled[col].apply(lambda x: f"{x:.2f}" if pd.notna(x) else "")
+            if 'risk_category' in df_styled.columns:
+                risk_colors = {
+                    'Rendah': '#28a745',
+                    'Sedang': '#ffc107', 
+                    'Tinggi': '#dc3545'
+                }
+                risk_text_colors = {
+                    'Rendah': '#ffffff',
+                    'Sedang': '#212529',
+                    'Tinggi': '#ffffff'
+                }
+                df_styled['risk_category'] = df_styled['risk_category'].apply(
+                    lambda x: f'<span style="background:{risk_colors.get(x, "#6c757d")};color:{risk_text_colors.get(x, "#fff")};padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;">{x}</span>' if pd.notna(x) else 'N/A'
+                )
+            if 'cluster' in df_styled.columns:
+                cluster_colors = {0: '#28a745', 1: '#ffc107', 2: '#dc3545'}
+                cluster_text = {0: '#ffffff', 1: '#212529', 2: '#ffffff'}
+                df_styled['cluster'] = df_styled['cluster'].apply(
+                    lambda x: f'<span style="background:{cluster_colors.get(int(x), "#6c757d")};color:{cluster_text.get(int(x), "#fff")};padding:4px 10px;border-radius:12px;font-size:11px;font-weight:600;">{int(x)}</span>' if pd.notna(x) else 'N/A'
+                )
+            
+            # Rename kolom agar lebih rapih
+            df_styled = df_styled.rename(columns=column_rename)
+            
+            styled_html = df_styled.to_html(index=False, escape=False, classes='custom-table')
             return f'''
             <div style="max-height: 420px; overflow-y: auto; border: 1px solid #e9ecef; border-radius: 8px;">
                 <style>
@@ -791,7 +854,7 @@ elif st.session_state.page == "data":
                 paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                 legend=dict(font=dict(color=THEME["text"])))
             fig_bar.update_xaxes(gridcolor='rgba(0,0,0,0.06)')
-            st.plotly_chart(fig_bar)
+            st.plotly_chart(fig_bar, width='stretch')
         
         with g2:
             st.markdown('<p class="section-title">Scatter: IR vs Jumlah Kasus</p>', unsafe_allow_html=True)
@@ -805,7 +868,7 @@ elif st.session_state.page == "data":
                 legend=dict(font=dict(color=THEME["text"])))
             fig_sc.update_xaxes(gridcolor='rgba(0,0,0,0.06)')
             fig_sc.update_yaxes(gridcolor='rgba(0,0,0,0.06)')
-            st.plotly_chart(fig_sc, use_container_width=True)
+            st.plotly_chart(fig_sc, width='stretch')
     
     with tab3:
         yearly_stats = df.groupby('year').agg({'jumlah_kasus':'sum','ir':'mean'}).reset_index()
@@ -820,7 +883,7 @@ elif st.session_state.page == "data":
                 paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
             fig_t.update_xaxes(gridcolor='rgba(0,0,0,0.06)')
             fig_t.update_yaxes(gridcolor='rgba(0,0,0,0.06)')
-            st.plotly_chart(fig_t, use_container_width=True)
+            st.plotly_chart(fig_t, width='stretch')
         with t2:
             st.markdown('<p class="section-title">Trend Rata-rata IR</p>', unsafe_allow_html=True)
             fig_i = px.line(yearly_stats, x='year', y='ir', markers=True,
@@ -831,7 +894,7 @@ elif st.session_state.page == "data":
                 paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
             fig_i.update_xaxes(gridcolor='rgba(0,0,0,0.06)')
             fig_i.update_yaxes(gridcolor='rgba(0,0,0,0.06)')
-            st.plotly_chart(fig_i, use_container_width=True)
+            st.plotly_chart(fig_i, width='stretch')
         
         st.markdown('<p class="section-title">Distribusi Cluster per Tahun</p>', unsafe_allow_html=True)
         yearly_cl = df.groupby(['year','cluster']).size().reset_index(name='count')
@@ -845,7 +908,7 @@ elif st.session_state.page == "data":
             legend=dict(font=dict(color=THEME["text"])))
         fig_s.update_xaxes(gridcolor='rgba(0,0,0,0.06)')
         fig_s.update_yaxes(gridcolor='rgba(0,0,0,0.06)')
-        st.plotly_chart(fig_s, use_container_width=True)
+        st.plotly_chart(fig_s, width='stretch')
 
 
 # ===================== FAQ PAGE =====================
@@ -984,6 +1047,7 @@ Di halaman "Lihat Data", Anda dapat:
 **Data Sources:**
 - 🌧️ **CHIRPS** - Data curah hujan satelit
 - 🌡️ **ERA5** - Data reanalysis iklim"""),
+
     ]
     
     for q, a in faq_items:
