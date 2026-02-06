@@ -230,16 +230,16 @@ st.markdown(f"""
     
     /* ===== SECTION TITLE ===== */
     .section-title {{
-        font-size: 2em;
-        font-weight: 600;
+        font-size: 1.2em !important;
+        font-weight: 600 !important;
         color: {THEME["text"]} !important;
-        margin: 0 0 16px 0;
-        padding: 0;
+        margin: 0 0 12px 0 !important;
+        padding: 0 !important;
     }}
     [data-testid="stMain"] .stMarkdown p.section-title {{
         font-size: 1.5em !important;
         font-weight: 600 !important;
-        margin: 0 0 16px 0 !important;
+        margin: 0 0 12px 0 !important;
     }}
     
     /* ===== DIVIDER ===== */
@@ -435,7 +435,7 @@ st.markdown(f"""
     /* Align columns vertically */
     [data-testid="stHorizontalBlock"] {{
         gap: 20px !important;
-        align-items: flex-end !important;
+        align-items: flex-start !important;
     }}
     
     /* Sidebar section titles */
@@ -674,37 +674,38 @@ if st.session_state.page == "home":
                 tooltip=row[kecamatan_col]
             ).add_to(m)
         
-        # Legend
-        legend_html = f"""
-        <div style="position:fixed;bottom:20px;left:20px;z-index:500;
-             background:white;padding:14px 18px;border-radius:8px;
-             box-shadow:0 2px 8px rgba(0,0,0,0.12);font-size:12px;color:#2c3e50;border:1px solid #e9ecef;">
-            <b style="font-size:12px;color:#495057;">Keterangan</b>
-            <div style="margin-top:10px;"><span style="background:{CLUSTER_COLORS[0]};width:14px;height:14px;display:inline-block;border-radius:3px;vertical-align:middle;"></span><span style="margin-left:10px;vertical-align:middle;">Rendah</span></div>
-            <div style="margin-top:6px;"><span style="background:{CLUSTER_COLORS[1]};width:14px;height:14px;display:inline-block;border-radius:3px;vertical-align:middle;"></span><span style="margin-left:10px;vertical-align:middle;">Sedang</span></div>
-            <div style="margin-top:6px;"><span style="background:{CLUSTER_COLORS[2]};width:14px;height:14px;display:inline-block;border-radius:3px;vertical-align:middle;"></span><span style="margin-left:10px;vertical-align:middle;">Tinggi</span></div>
-        </div>
-        """
-        m.get_root().html.add_child(folium.Element(legend_html))
-        
-        # Hide Leaflet attribution & fix popup z-index
+        # Hide Leaflet attribution (NO legend inside map anymore)
         hide_attr_css = """
         <style>
             .leaflet-control-attribution {
                 display: none !important;
             }
-            /* Pastikan popup selalu di atas legend */
-            .leaflet-popup {
-                z-index: 1000 !important;
-            }
-            .leaflet-popup-pane {
-                z-index: 1000 !important;
-            }
         </style>
         """
         m.get_root().html.add_child(folium.Element(hide_attr_css))
         
-        st_folium(m, height=580, width="stretch")
+        st_folium(m, height=520, width='stretch')
+
+        st.markdown(f"""
+        <div style="display:inline-flex;gap:20px;align-items:center;margin-top:-12px;
+             background:{THEME["card_bg"]};padding:8px 18px;border-radius:8px;
+             border:1px solid {THEME["border"]};box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+            <span style="font-size:13px;font-weight:600;color:{THEME["text_muted"]};">Keterangan:</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;">
+                <span style="background:{CLUSTER_COLORS[0]};width:14px;height:14px;display:inline-block;border-radius:3px;"></span>
+                <span style="font-size:13px;color:{THEME["text"]};">Rendah</span>
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;">
+                <span style="background:{CLUSTER_COLORS[1]};width:14px;height:14px;display:inline-block;border-radius:3px;"></span>
+                <span style="font-size:13px;color:{THEME["text"]};">Sedang</span>
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;">
+                <span style="background:{CLUSTER_COLORS[2]};width:14px;height:14px;display:inline-block;border-radius:3px;"></span>
+                <span style="font-size:13px;color:{THEME["text"]};">Tinggi</span>
+            </span>
+        </div>
+        """, unsafe_allow_html=True)
+               
     
     with col_stats:
         st.markdown('<p class="section-title">📈 Ringkasan Cluster</p>', unsafe_allow_html=True)
@@ -726,13 +727,13 @@ if st.session_state.page == "home":
             """, unsafe_allow_html=True)
         
         # Distribusi
-        st.markdown('<p class="section-title" style="margin-top:16px;">📊 Distribusi</p>', unsafe_allow_html=True)
+        st.markdown('<p class="section-title">📊 Distribusi</p>', unsafe_allow_html=True)
         for cid in sorted(df_filtered['cluster'].dropna().unique()):
             cdata = df_filtered[df_filtered['cluster'] == cid]
             pct = len(cdata) / len(df_filtered) * 100
             names = {0: "Rendah", 1: "Sedang", 2: "Tinggi"}
             st.markdown(f"""
-            <div style="display:flex;align-items:center;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;margin-bottom:16px;">
                 <span style="background:{CLUSTER_COLORS[int(cid)]};width:14px;height:14px;border-radius:3px;margin-right:10px;"></span>
                 <span style="flex:1;color:{THEME["text_muted"]};font-size:0.9em;">{names.get(int(cid))}</span>
                 <span style="color:{THEME["text"]};font-weight:600;font-size:0.95em;">{len(cdata)} ({pct:.0f}%)</span>
