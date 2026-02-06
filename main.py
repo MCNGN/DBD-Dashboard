@@ -3,8 +3,11 @@ from package.earth_engine.datasets import precipitation_monthly , temperature_mo
 from package.bps.datasets import get_population_density, get_case_dbd
 from package.utils import check_data_exist, to_csv
 from package.preprocess.preprocess import merge_data
-from package.process.process import process_z_score
+from package.process.process import process_z_score, process_clustering
 import pandas as pd
+import subprocess
+import sys
+from pathlib import Path
 
 data = [{
         "func": precipitation_monthly, 
@@ -54,4 +57,10 @@ for item in data:
 
 preprocess_data = merge_data()
 
-process_z_score(preprocess_data)
+processed_z_score = process_z_score(preprocess_data)
+
+process_clustering(processed_z_score)
+
+
+streamlit_script = Path(__file__).resolve().parent / "package" / "streamlit" / "streamlit_app.py"
+subprocess.run([sys.executable, "-m", "streamlit", "run", str(streamlit_script)])

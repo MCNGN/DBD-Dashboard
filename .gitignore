@@ -40,6 +40,3 @@ pip-delete-this-arg.txt
 Thumbs.db # Windows
 
 .env
-raw_data/
-preprocess_data/
-processed_data/
