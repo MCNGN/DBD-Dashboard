@@ -40,3 +40,8 @@ pip-delete-this-arg.txt
 Thumbs.db # Windows
 
 .env
+
+Gambar_2_Visualisasi_Klaster.png
+main_backup.py
+preprocessed.ipynb
+test.ipynb
