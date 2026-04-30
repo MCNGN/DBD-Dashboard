@@ -61,6 +61,5 @@ processed_z_score = process_z_score(preprocess_data)
 
 process_clustering(processed_z_score)
 
-
 streamlit_script = Path(__file__).resolve().parent / "package" / "streamlit" / "streamlit_app.py"
 subprocess.run([sys.executable, "-m", "streamlit", "run", str(streamlit_script)])
