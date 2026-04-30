@@ -55,11 +55,26 @@ for item in data:
         except Exception as e:
             print(f"Gagal memproses data {item["label"]} \n", str(e))
 
-preprocess_data = merge_data()
+try:
+    print("Menggabungkan data preprocess...")
+    preprocess_data = merge_data()
+except Exception as e:
+    print("Gagal menggabungkan data preprocess\n", str(e))
+    sys.exit(1)
 
-processed_z_score = process_z_score(preprocess_data)
+try:
+    print("Menghitung z-score...")
+    processed_z_score = process_z_score(preprocess_data)
+except Exception as e:
+    print("Gagal menghitung z-score\n", str(e))
+    sys.exit(1)
 
-process_clustering(processed_z_score)
+try:
+    print("Melakukan clustering...")
+    process_clustering(processed_z_score)
+except Exception as e:
+    print("Gagal melakukan clustering\n", str(e))
+    sys.exit(1)
 
 streamlit_script = Path(__file__).resolve().parent / "package" / "streamlit" / "streamlit_app.py"
 subprocess.run([sys.executable, "-m", "streamlit", "run", str(streamlit_script)])
