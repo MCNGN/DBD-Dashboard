@@ -4,6 +4,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parents[2]
 raw_dir = project_root / "raw_data"
 preprocess_dir = project_root / "preprocess_data"
+preprocess_dir.mkdir(parents=True, exist_ok=True)
 
 case_dbd = {"raw" : "case_dbd.csv", "preprocess" : "case_dbd_preprocess.csv"}
 precipitation = {"raw" : "curah_hujan.csv", "preprocess" : "precipitation_preprocess.csv"}

@@ -4,6 +4,7 @@ from sklearn.cluster import KMeans
 
 project_root = Path(__file__).resolve().parents[2]
 processed_dir = project_root / "processed_data"
+processed_dir.mkdir(parents=True, exist_ok=True)
 
 def process_z_score(filename):
 
